@@ -7,11 +7,11 @@ namespace CheckoutSystem.Repositories
 {
     public interface ICheckoutRepository
     {
-        ICheckout GetOrAddCheckout(string sessionId);
-        void AddCheckout(string sessionId);
+        ICheckout GetOrAddCheckout(string sessionId, ICheckout checkout);
+        void AddCheckout(string sessionId, ICheckout checkout);
     }
 
-    public class CheckoutRepository : ICheckoutRepository
+    public class CheckoutRepository : ICheckoutRepository // TODO this should be rather IRepository
     {
         IDictionary<string, ICheckout> _checkouts;
 
@@ -20,16 +20,16 @@ namespace CheckoutSystem.Repositories
             _checkouts = new Dictionary<string, ICheckout>();
         }
 
-        public void AddCheckout(string sessionId)
+        public void AddCheckout(string sessionId, ICheckout checkout)
         {
-            _checkouts.Add(sessionId, new Checkout(new Scanner()));
+            _checkouts.Add(sessionId, checkout);
         }
 
-        public ICheckout GetOrAddCheckout(string sessionId)
+        public ICheckout GetOrAddCheckout(string sessionId, ICheckout checkout)
         {
             if (!_checkouts.ContainsKey(sessionId))
             {
-                AddCheckout(sessionId);
+                AddCheckout(sessionId, checkout);
             }
             return _checkouts[sessionId];
         }

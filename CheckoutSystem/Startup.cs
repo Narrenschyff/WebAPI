@@ -26,7 +26,7 @@ namespace CheckoutSystem
         {
             services.AddMvc();
             services.AddSingleton<ICheckoutRepository, CheckoutRepository>();
-
+            services.AddSingleton<IItemsRepository, ItemsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

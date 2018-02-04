@@ -3,6 +3,7 @@ using System.Net.Http;
 using CheckoutSystem.Controllers;
 using CheckoutSystem.Models;
 using CheckoutSystem.Repositories;
+using CheckoutSystem.Services;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -18,7 +19,14 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            _controller = new CheckoutController(new CheckoutRepository());
+            var checkoutRepo = new Mock<ICheckoutRepository>();
+            var checkout = new Mock<ICheckout>();
+            checkout.Setup(x => x.ScanItem(It.IsAny<string>()))
+                    .Returns("A");
+            checkoutRepo.Setup(x => x.GetOrAddCheckout(It.IsAny<string>(), It.IsAny<ICheckout>()))
+                        .Returns(checkout.Object);
+            var itemsRepo = new Mock<IItemsRepository>();
+            _controller = new CheckoutController(checkoutRepo.Object, itemsRepo.Object);
         }
 
         [Test]

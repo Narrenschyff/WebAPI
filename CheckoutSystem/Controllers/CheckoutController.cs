@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CheckoutSystem.Models;
 using CheckoutSystem.Repositories;
+using CheckoutSystem.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,13 @@ namespace CheckoutSystem.Controllers
     public class CheckoutController : Controller
     {
         ICheckoutRepository _repository;
+        IItemsRepository _itemsRepo;
+        IScanner _scanner;
 
-        public CheckoutController(ICheckoutRepository repository){
+        public CheckoutController(ICheckoutRepository repository, IItemsRepository itemsRepo){
             _repository = repository;
+            _itemsRepo = itemsRepo;
+            _scanner = new Scanner(itemsRepo);
         }
 
         [HttpGet("[action]")]
@@ -54,7 +59,7 @@ namespace CheckoutSystem.Controllers
                 ? new Guid().ToString() 
                 : HttpContext.Session.Id;
             
-            var checkout = _repository.GetOrAddCheckout(sessionId);
+            var checkout = _repository.GetOrAddCheckout(sessionId, new Checkout(_scanner));
             var scannedItem  = checkout.ScanItem(itemCode);
             return CreatedAtAction(nameof(GetItem), new { sku = scannedItem });
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using CheckoutSystem.Models;
+using CheckoutSystem.Repositories;
 
 namespace CheckoutSystem.Services
 {
@@ -12,16 +13,29 @@ namespace CheckoutSystem.Services
     }
     public class Scanner : IScanner
     {
+        private IItemsRepository _itemRepo;
+
+        public Scanner(IItemsRepository repo) {
+            _itemRepo = repo;
+        }
+
         public IItem GetScannedItem(string itemCode)
         {
-            if (itemCode == "ACode")
+            if (itemCode == "A")
             {
-                return new FoodItem()
-                {
-                    Sku = "A",
-                    Name = "Pineapple",
-                    Price = 50.0
-                };
+                _itemRepo.GetFoodItem("A");
+            }
+            if (itemCode == "B")
+            {
+                _itemRepo.GetFoodItem("");
+            }
+            if (itemCode == "C")
+            {
+                _itemRepo.GetFoodItem("C");
+            }
+            if (itemCode == "D")
+            {
+                _itemRepo.GetFoodItem("D");
             }
             return null;
         }
