@@ -71,7 +71,7 @@ namespace Tests
         [Test]
         public void ScanItemReturnsCreatedItem()
         {
-            var result = _controller.ScanItem("ACode");
+            var result = _controller.ScanItem("A");
             var okResult = result.Should().BeOfType<CreatedAtActionResult>().Subject;
             var item = okResult.Value.Should().BeAssignableTo<object>().Subject;
             item.ShouldBeEquivalentTo(new {sku="A"});

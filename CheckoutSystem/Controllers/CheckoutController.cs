@@ -11,12 +11,12 @@ namespace CheckoutSystem.Controllers
     [Route("api/[controller]")]
     public class CheckoutController : Controller
     {
-        ICheckoutRepository _repository;
+        ICheckoutRepository _checkoutRepo;
         IItemsRepository _itemsRepo;
         IScanner _scanner;
 
-        public CheckoutController(ICheckoutRepository repository, IItemsRepository itemsRepo){
-            _repository = repository;
+        public CheckoutController(ICheckoutRepository checkoutRepo, IItemsRepository itemsRepo){
+            _checkoutRepo = checkoutRepo;
             _itemsRepo = itemsRepo;
             _scanner = new Scanner(itemsRepo);
         }
@@ -24,12 +24,18 @@ namespace CheckoutSystem.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllItems()
         {
-            return Ok(new Item[] {});
+            return Ok(new IItem[] {});
         }
 
         [HttpGet("[action]")]
         public IActionResult GetTotalPrice()
         {
+            var sessionId = (HttpContext == null)
+                ? new Guid().ToString()
+                : HttpContext.Session.Id;
+
+            var checkout = _checkoutRepo.GetOrAddCheckout(sessionId, new Checkout(_scanner));
+
             return Ok(0);
         }
 
@@ -59,7 +65,7 @@ namespace CheckoutSystem.Controllers
                 ? new Guid().ToString() 
                 : HttpContext.Session.Id;
             
-            var checkout = _repository.GetOrAddCheckout(sessionId, new Checkout(_scanner));
+            var checkout = _checkoutRepo.GetOrAddCheckout(sessionId, new Checkout(_scanner));
             var scannedItem  = checkout.ScanItem(itemCode);
             return CreatedAtAction(nameof(GetItem), new { sku = scannedItem });
         }
