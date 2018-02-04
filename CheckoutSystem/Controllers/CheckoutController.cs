@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using CheckoutSystem.Models;
+using CheckoutSystem.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckoutSystem.Controllers
@@ -8,6 +10,12 @@ namespace CheckoutSystem.Controllers
     [Route("api/[controller]")]
     public class CheckoutController : Controller
     {
+        ICheckoutRepository _repository;
+
+        public CheckoutController(ICheckoutRepository repository){
+            _repository = repository;
+        }
+
         [HttpGet("[action]")]
         public IActionResult GetAllItems()
         {
@@ -20,6 +28,7 @@ namespace CheckoutSystem.Controllers
             return Ok(0);
         }
 
+        // GET api/checkout
         [HttpGet("[action]")]
         public IActionResult GetTotalDiscount()
         {
@@ -41,8 +50,13 @@ namespace CheckoutSystem.Controllers
         [HttpPost]
         public IActionResult ScanItem([FromBody]string itemCode)
         {
-            // add to the checkout
-            return CreatedAtAction(nameof(GetItem), new { sku = "A" });
+            var sessionId = (HttpContext == null) 
+                ? new Guid().ToString() 
+                : HttpContext.Session.Id;
+            
+            var checkout = _repository.GetOrAddCheckout(sessionId);
+            var scannedItem  = checkout.ScanItem(itemCode);
+            return CreatedAtAction(nameof(GetItem), new { sku = scannedItem });
         }
 
         // DELETE api/checkout/5

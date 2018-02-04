@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using CheckoutSystem.Controllers;
 using CheckoutSystem.Models;
+using CheckoutSystem.Repositories;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -17,7 +18,7 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            _controller = new CheckoutController();
+            _controller = new CheckoutController(new CheckoutRepository());
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace Tests
         [Test]
         public void ScanItemReturnsCreatedItem()
         {
-            var result = _controller.ScanItem("barcode");
+            var result = _controller.ScanItem("ACode");
             var okResult = result.Should().BeOfType<CreatedAtActionResult>().Subject;
             var item = okResult.Value.Should().BeAssignableTo<object>().Subject;
             item.ShouldBeEquivalentTo(new {sku="A"});
