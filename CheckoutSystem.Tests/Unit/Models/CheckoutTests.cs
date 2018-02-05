@@ -1,5 +1,4 @@
-﻿using System;
-using CheckoutSystem.Models;
+﻿using CheckoutSystem.Models;
 using CheckoutSystem.Services;
 using Moq;
 using NUnit.Framework;

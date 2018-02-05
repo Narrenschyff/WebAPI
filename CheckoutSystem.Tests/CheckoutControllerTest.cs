@@ -39,8 +39,6 @@ namespace Tests
             var item = okResult.Value.Should().BeAssignableTo<IItem>().Subject;
 
             Assert.AreEqual("A", item.Sku);
-            Assert.AreEqual("pineapple", item.Name);
-            Assert.AreEqual(50, item.Price);
         }
 
         [Test]
@@ -49,14 +47,6 @@ namespace Tests
             var result = _controller.GetTotalPrice();
             var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
             Assert.AreEqual(0, okResult.Value);           
-        }
-
-        [Test]
-        public void GetTotalDiscountReturnsDouble()
-        {
-            var result = _controller.GetTotalDiscount();
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            Assert.AreEqual(0, okResult.Value);
         }
 
         [Test]

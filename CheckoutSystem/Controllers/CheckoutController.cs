@@ -24,7 +24,12 @@ namespace CheckoutSystem.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllItems()
         {
-            return Ok(new IItem[] {});
+            var sessionId = (HttpContext == null)
+                ? new Guid().ToString()
+                : HttpContext.Session.Id;
+
+            var checkout = _checkoutRepo.GetOrAddCheckout(sessionId, new Checkout(_scanner));
+            return Ok(checkout.GetAllItems());
         }
 
         [HttpGet("[action]")]
@@ -35,26 +40,14 @@ namespace CheckoutSystem.Controllers
                 : HttpContext.Session.Id;
 
             var checkout = _checkoutRepo.GetOrAddCheckout(sessionId, new Checkout(_scanner));
-
-            return Ok(0);
-        }
-
-        // GET api/checkout
-        [HttpGet("[action]")]
-        public IActionResult GetTotalDiscount()
-        {
-            return Ok(0);
+            return Ok(checkout.GetTotalPrice());
         }
 
         // GET api/checkout/A
         [HttpGet("{id}")]
         public IActionResult GetItem(string sku)
         {
-            var item = new FoodItem();
-            item.Name = "pineapple";
-            item.Sku = "A";
-            item.Price = 50;
-            return Ok(item);
+            return Ok(_itemsRepo.GetItem(sku));
         }
 
         // POST api/checkout
@@ -74,7 +67,7 @@ namespace CheckoutSystem.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteItem(string sku)
         {
-            return Ok();
+            return Ok(); //TODO
         }
     }
 }

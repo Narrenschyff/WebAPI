@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CheckoutSystem.Models;
 
 namespace CheckoutSystem.Services
@@ -7,6 +8,8 @@ namespace CheckoutSystem.Services
     {
         
         string ScanItem(string itemCode);
+        double GetTotalPrice();
+        IEnumerable<IItem> GetAllItems();
     }
 
     public class Checkout : ICheckout
@@ -18,6 +21,16 @@ namespace CheckoutSystem.Services
         {
             _order = new Order();
             _scanner = scanner;
+        }
+
+        public IEnumerable<IItem> GetAllItems()
+        {
+            return _order.GetAllItems();
+        }
+
+        public double GetTotalPrice()
+        {
+            return _order.GetTotalPrice();
         }
 
         public string ScanItem(string itemCode)

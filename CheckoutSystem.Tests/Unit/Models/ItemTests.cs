@@ -1,5 +1,4 @@
-﻿using System;
-using CheckoutSystem.Models;
+﻿using CheckoutSystem.Models;
 using NUnit.Framework;
 
 namespace CheckoutSystem.Tests

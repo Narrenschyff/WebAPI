@@ -23,19 +23,19 @@ namespace CheckoutSystem.Services
         {
             if (itemCode == "A")
             {
-                _itemRepo.GetFoodItem("A");
+                _itemRepo.GetItem("A");
             }
             if (itemCode == "B")
             {
-                _itemRepo.GetFoodItem("");
+                _itemRepo.GetItem("");
             }
             if (itemCode == "C")
             {
-                _itemRepo.GetFoodItem("C");
+                _itemRepo.GetItem("C");
             }
             if (itemCode == "D")
             {
-                _itemRepo.GetFoodItem("D");
+                _itemRepo.GetItem("D");
             }
             return null;
         }

@@ -52,7 +52,7 @@ namespace CheckoutSystem.Models
             set;
         }
 
-        public double CalculatePriceGivenQuantity(int numberOfItems){
+        public double CalculatePriceGivenQuantity(int numberOfItems) {
             if (Promotion.quantity == 0 || numberOfItems < Promotion.quantity) {
                 return numberOfItems * Price;
             } 

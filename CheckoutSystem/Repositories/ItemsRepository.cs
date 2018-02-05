@@ -6,7 +6,7 @@ namespace CheckoutSystem.Repositories
 {
     public interface IItemsRepository
     {
-        IItem GetFoodItem(string sku);
+        IItem GetItem(string sku);
     }
 
     public class ItemsRepository : IItemsRepository // TODO this should be rather IRepository
@@ -27,7 +27,7 @@ namespace CheckoutSystem.Repositories
             return items;
         }
 
-        public IItem GetFoodItem(string sku) {
+        public IItem GetItem(string sku) {
             return _items[sku];
         }
 
